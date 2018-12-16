@@ -12,14 +12,14 @@ import android.widget.TextView;
 public class TagFragment  extends Fragment {
 
     private final static String KEY = "lol";
-    private Integer number;
+    private String number;
     TextView textView;
 
-    public static TagFragment newInstance(Integer num) {
+    public static TagFragment newInstance(String data) {
         TagFragment myFragment = new TagFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putInt(KEY, num);
+        bundle.putString(KEY, data);
 
         myFragment.setArguments(bundle);
 
@@ -33,7 +33,7 @@ public class TagFragment  extends Fragment {
         Bundle arguments = getArguments();
 
         if (arguments != null) {
-            number = arguments.getInt(KEY);
+            number = arguments.getString(KEY);
         }
     }
 
@@ -49,12 +49,9 @@ public class TagFragment  extends Fragment {
 
         textView = view.findViewById(R.id.text);
 
-        if (number % 2 == 0) {
-            textView.setTextColor(getResources().getColor(R.color.red));
-        } else {
-            textView.setTextColor(getResources().getColor(R.color.blue));
-        }
+        textView.setTextColor(getResources().getColor(R.color.cyan));
 
-        textView.setText(number.toString());
+
+        textView.setText(number);
     }
 }

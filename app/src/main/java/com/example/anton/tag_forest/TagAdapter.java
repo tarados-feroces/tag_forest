@@ -16,12 +16,12 @@ import java.util.List;
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.NumbersRecyclerViewHolder> {
 
     private final LayoutInflater layoutInflater;
-    private final List<Integer> data;
+    private final List<String> data;
 
-    private final OnItemClickListener<Integer> onItemClickListener;
+    private final OnItemClickListener<String> onItemClickListener;
 
 
-    public TagAdapter(Context context, OnItemClickListener<Integer> onItemClickListener) {
+    public TagAdapter(Context context, OnItemClickListener<String> onItemClickListener) {
         layoutInflater = LayoutInflater.from(context);
 
         this.data = new ArrayList<>();
@@ -45,8 +45,8 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.NumbersRecyclerV
         return data.size();
     }
 
-    public void add(Integer newData) {
-        data.add(0, newData);
+    public void add(String name) {
+        data.add(0, name);
         notifyItemInserted(0);
     }
 
@@ -59,12 +59,10 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.NumbersRecyclerV
             number = tagView.findViewById(R.id.num);
         }
 
-        void bind(final Integer i, OnItemClickListener onItemClickListener) {
-            number.setText(i.toString());
+        void bind(final String i, OnItemClickListener onItemClickListener) {
+            number.setText(i);
 
             itemView.setOnClickListener(v -> onItemClickListener.onItemClick(i));
         }
-
-
     }
 }

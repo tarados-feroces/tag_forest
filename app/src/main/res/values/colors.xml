@@ -5,4 +5,9 @@
     <color name="colorAccent">#D81B60</color>
     <color name="headerColor">#8be772</color>
     <color name="buttonsColor">#d1f1d8</color>
+    <color name="red">#ff0000</color>
+    <color name="cyan">#00f9ec</color>
+    <color name="pink">#ffa3c5</color>
+    <color name="orange">#ff6600</color>
+    <color name="purple">#e400ec</color>
 </resources>

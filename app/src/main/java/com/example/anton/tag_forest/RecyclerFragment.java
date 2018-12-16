@@ -41,22 +41,23 @@ public class RecyclerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        NumbersAdapter numbersAdapter = new NumbersAdapter(getContext(), this::onItemClick);
+        TagAdapter tagAdapter = new TagAdapter(getContext(), this::onItemClick);
 
         RecyclerView numbers = view.findViewById(R.id.numbers_list);
         numbers.setLayoutManager(new GridLayoutManager(getContext(), getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3));
-        numbers.setAdapter(numbersAdapter);
+        numbers.setAdapter(tagAdapter);
         numbers.setHasFixedSize(true);
 
 
-        for (Integer i = 1000; i > 0; --i) {
-            numbersAdapter.add(i);
-        }
+
+        tagAdapter.add("Images");
+        tagAdapter.add("Documents");
+        tagAdapter.add("Video");
     }
 
-    private void onItemClick(Integer i) {
+    private void onItemClick(String i) {
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, NumberFragment.newInstance(i))
+                .replace(R.id.content, TagFragment.newInstance(i))
                 .addToBackStack(null)
                 .commit();
     }
