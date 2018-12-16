@@ -31,7 +31,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerView
     @NonNull
     @Override
     public TagsRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new TagsRecyclerViewHolder(layoutInflater.inflate(R.layout.tag, parent, false));
+        return new TagsRecyclerViewHolder(layoutInflater.inflate(R.layout.tag_fragment, parent, false));
     }
 
     @Override
@@ -56,13 +56,13 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerView
 
         TagsRecyclerViewHolder(View tagView) {
             super(tagView);
-            tag = tagView.findViewById(R.id.container);
+            tag = tagView.findViewById(R.id.tag_name);
         }
 
-        void bind(final String i, OnItemClickListener onItemClickListener) {
-            tag.setText(i);
+        void bind(final String name, OnItemClickListener onItemClickListener) {
+            tag.setText(name);
 
-            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(i));
+            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(name));
         }
     }
 }

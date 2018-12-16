@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 
 public class TagFragment  extends Fragment {
 
-    private final static String KEY = "";
+    private final static String KEY = "lol";
     private String tag_name;
     TextView textView;
 
@@ -50,6 +51,9 @@ public class TagFragment  extends Fragment {
         textView = view.findViewById(R.id.tag);
 
         textView.setTextColor(getResources().getColor(R.color.cyan));
+
+
+        Log.d("AAAAAAAAAA", "AAAAAAAAAA");
 
         textView.setText(tag_name);
     }
