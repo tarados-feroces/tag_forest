@@ -42,8 +42,6 @@
             android:layout_height="fill_parent"
             android:layout_below="@id/header"
             android:gravity="center">
-
-
         </RelativeLayout>
 
     </RelativeLayout>
