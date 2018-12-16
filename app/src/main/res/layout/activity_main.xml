@@ -36,13 +36,14 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/content"
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@id/header"
-            android:gravity="center">
-        </RelativeLayout>
+            android:gravity="center"
+            tools:context=".MainActivity">
+        </FrameLayout>
 
     </RelativeLayout>
 

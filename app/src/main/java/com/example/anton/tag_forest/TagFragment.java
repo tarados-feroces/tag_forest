@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 public class TagFragment  extends Fragment {
 
-    private final static String KEY = "lol";
-    private String number;
+    private final static String KEY = "";
+    private String tag_name;
     TextView textView;
 
     public static TagFragment newInstance(String data) {
@@ -33,7 +33,7 @@ public class TagFragment  extends Fragment {
         Bundle arguments = getArguments();
 
         if (arguments != null) {
-            number = arguments.getString(KEY);
+            tag_name = arguments.getString(KEY);
         }
     }
 
@@ -47,11 +47,10 @@ public class TagFragment  extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        textView = view.findViewById(R.id.text);
+        textView = view.findViewById(R.id.tag);
 
         textView.setTextColor(getResources().getColor(R.color.cyan));
 
-
-        textView.setText(number);
+        textView.setText(tag_name);
     }
 }
