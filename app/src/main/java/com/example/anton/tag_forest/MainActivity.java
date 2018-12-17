@@ -3,7 +3,11 @@ package com.example.anton.tag_forest;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import com.example.anton.tag_forest.TagDB.DatabaseManager;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +20,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, RecyclerFragment.newInstance())
                 .commit();
+
+        DatabaseManager db = new DatabaseManager();
+//        db.addFileByTag("/home/danchetto/12345", "LOL");
+        Log.d("wat?", db.getAllFiles().toString());
     }
 
     public void goToSearch(View view) {

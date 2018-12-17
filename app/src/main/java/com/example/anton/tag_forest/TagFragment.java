@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class TagFragment  extends Fragment {
+public class TagFragment extends Fragment {
 
     private final static String KEY = "lol";
     private String tag_name;
