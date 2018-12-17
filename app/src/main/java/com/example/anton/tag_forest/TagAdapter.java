@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TagAdapter extends RecyclerView.Adapter<TagAdapter.NumbersRecyclerViewHolder> {
+public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerViewHolder> {
 
     private final LayoutInflater layoutInflater;
     private final List<String> data;
@@ -30,14 +30,14 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.NumbersRecyclerV
 
     @NonNull
     @Override
-    public NumbersRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new NumbersRecyclerViewHolder(layoutInflater.inflate(R.layout.tag, parent, false));
+    public TagsRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new TagsRecyclerViewHolder(layoutInflater.inflate(R.layout.tag_fragment, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(NumbersRecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(TagsRecyclerViewHolder holder, int position) {
         holder.bind(data.get(position), this.onItemClickListener);
-        holder.number.setTextColor(position % 2 == 1 ? Color.RED : Color.BLUE);
+        holder.tag.setTextColor(Color.RED);
     }
 
     @Override
@@ -50,19 +50,19 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.NumbersRecyclerV
         notifyItemInserted(0);
     }
 
-    final static class NumbersRecyclerViewHolder extends RecyclerView.ViewHolder {
-        private final TextView number;
+    final static class TagsRecyclerViewHolder extends RecyclerView.ViewHolder {
+        private final TextView tag;
 
 
-        NumbersRecyclerViewHolder(View tagView) {
+        TagsRecyclerViewHolder(View tagView) {
             super(tagView);
-            number = tagView.findViewById(R.id.num);
+            tag = tagView.findViewById(R.id.tag_name);
         }
 
-        void bind(final String i, OnItemClickListener onItemClickListener) {
-            number.setText(i);
+        void bind(final String name, OnItemClickListener onItemClickListener) {
+            tag.setText(name);
 
-            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(i));
+            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(name));
         }
     }
 }

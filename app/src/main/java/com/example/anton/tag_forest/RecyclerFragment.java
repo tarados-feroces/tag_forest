@@ -43,12 +43,10 @@ public class RecyclerFragment extends Fragment {
 
         TagAdapter tagAdapter = new TagAdapter(getContext(), this::onItemClick);
 
-        RecyclerView numbers = view.findViewById(R.id.numbers_list);
-        numbers.setLayoutManager(new GridLayoutManager(getContext(), getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3));
-        numbers.setAdapter(tagAdapter);
-        numbers.setHasFixedSize(true);
-
-
+        RecyclerView tags = view.findViewById(R.id.tags_list);
+        tags.setLayoutManager(new GridLayoutManager(getContext(), getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3));
+        tags.setAdapter(tagAdapter);
+        tags.setHasFixedSize(true);
 
         tagAdapter.add("Images");
         tagAdapter.add("Documents");
@@ -57,7 +55,7 @@ public class RecyclerFragment extends Fragment {
 
     private void onItemClick(String i) {
         getFragmentManager().beginTransaction()
-                .replace(R.id.content, TagFragment.newInstance(i))
+                .replace(R.id.container, TagFragment.newInstance(i))
                 .addToBackStack(null)
                 .commit();
     }
