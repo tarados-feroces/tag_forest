@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,11 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerView
     private final LayoutInflater layoutInflater;
     private final List<String> data;
 
-    private final OnItemClickListener<String> onItemClickListener;
 
-
-    public TagAdapter(Context context, OnItemClickListener<String> onItemClickListener) {
+    public TagAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
 
         this.data = new ArrayList<>();
-        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -36,7 +34,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerView
 
     @Override
     public void onBindViewHolder(TagsRecyclerViewHolder holder, int position) {
-        holder.bind(data.get(position), this.onItemClickListener);
+        holder.bind(data.get(position));
         holder.tag.setTextColor(Color.WHITE);
     }
 
@@ -59,10 +57,10 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerView
             tag = tagView.findViewById(R.id.tag_name);
         }
 
-        void bind(final String name, OnItemClickListener onItemClickListener) {
+        void bind(final String name) {
             tag.setText(name);
 
-            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(name));
+            itemView.setOnClickListener(v -> {Toast.makeText(tag.getContext(), name, Toast.LENGTH_LONG).show();});
         }
     }
 }
