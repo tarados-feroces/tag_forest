@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 777);
         }
 
+
+        setContentView(R.layout.activity_main);
+
         SearchView searchView = findViewById(R.id.search_panel);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -45,17 +48,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setContentView(R.layout.activity_main);
+
         fragment = new FileManagerFragment();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.tag_container, RecyclerFragment.newInstance())
                 .replace(R.id.container, fragment)
                 .commit();
-
-        findViewById(R.id.btn_file_manager).setOnClickListener(v -> startActivity(
-                new Intent(MainActivity.this, SearchActivity.class)
-        ));
 
         DatabaseManager db = new DatabaseManager();
     }
