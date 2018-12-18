@@ -55,6 +55,6 @@ public class TagFragment extends Fragment {
 
         Log.d("AAAAAAAAAA", "AAAAAAAAAA");
 
-        textView.setText(tag_name);
+        textView.setText("LOL");
     }
 }
