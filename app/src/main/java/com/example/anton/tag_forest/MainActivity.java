@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.anton.tag_forest.TagDB.DatabaseManager;
+import com.example.anton.tag_forest.filemanager.FileManagerFragment;
 
 import java.util.logging.Logger;
 
@@ -20,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, RecyclerFragment.newInstance())
+                //.replace(R.id.container, RecyclerFragment.newInstance())
+                .replace(R.id.container, new FileManagerFragment())
                 .commit();
 
         findViewById(R.id.btn_file_manager).setOnClickListener(v -> startActivity(

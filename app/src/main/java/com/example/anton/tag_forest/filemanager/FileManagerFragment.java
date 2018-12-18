@@ -18,6 +18,7 @@ import com.example.anton.tag_forest.R;
 
 
 public class FileManagerFragment extends Fragment {
+    private FilesAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class FileManagerFragment extends Fragment {
             }
         }
 
-        FilesAdapter adapter = new FilesAdapter(view.getContext());
+        adapter = new FilesAdapter(view.getContext());
         View someView = getView();
         if (someView != null) {
             RecyclerView recyclerView = getView().findViewById(R.id.files);
@@ -49,6 +50,10 @@ public class FileManagerFragment extends Fragment {
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_file_manager, container, false);
+    }
+
+    public FilesAdapter getAdapter() {
+        return adapter;
     }
 
 }
