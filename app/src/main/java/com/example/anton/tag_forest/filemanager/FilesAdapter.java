@@ -20,7 +20,7 @@ import com.example.anton.tag_forest.R;
 import java.io.File;
 import java.util.Arrays;
 
-class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHolder> {
+public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHolder> {
 
     private final LayoutInflater layoutInflater;
     private final File initialFile;
@@ -43,7 +43,7 @@ class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHolder> {
         notifyDataSetChanged();
     }
 
-    boolean goBack() {
+    public boolean goBack() {
         if (currentFile.equals(initialFile)) {
             return false;
         }

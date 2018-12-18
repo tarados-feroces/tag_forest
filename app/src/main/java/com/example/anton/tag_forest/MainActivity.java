@@ -7,16 +7,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.anton.tag_forest.TagDB.DatabaseManager;
-import com.example.anton.tag_forest.filemanager.FileManagerFragment;
-
-import java.util.logging.Logger;
+import com.example.anton.tag_forest.filemanager.*;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    FilesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +28,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
+        FileManagerFragment fileManagerFragment = new FileManagerFragment();
+        adapter = fileManagerFragment.getAdapter();
 
         getSupportFragmentManager().beginTransaction()
                 //.replace(R.id.container, RecyclerFragment.newInstance())
-                .replace(R.id.container, new FileManagerFragment())
+                .replace(R.id.container, fileManagerFragment)
                 .commit();
 
         findViewById(R.id.btn_file_manager).setOnClickListener(v -> startActivity(
@@ -45,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
     public void goToSearch(View view) {
         Intent searchIntent = new Intent(this, SearchActivity.class);
         startActivity(searchIntent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!adapter.goBack()) {
+            super.onBackPressed();
+        }
     }
 
 }
