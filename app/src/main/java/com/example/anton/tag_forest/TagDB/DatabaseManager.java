@@ -1,96 +1,103 @@
 package com.example.anton.tag_forest.TagDB;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.Nullable;
 
-import com.example.anton.tag_forest.TagDB.entities.Files;
+
 import com.example.anton.tag_forest.TagDB.entities.Tag;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class DatabaseManager {
 
     @SuppressLint("StaticFieldLeak")
     private static final DatabaseManager INSTANCE = new DatabaseManager();
 
+    private static final String DB_NAME = "TagFileDatabase.db";
+    private static final int VERSION = 1;
+
     public static DatabaseManager getInstance(Context context) {
         INSTANCE.context = context.getApplicationContext();
         return INSTANCE;
     }
 
-    private final ExecutorService executor =  Executors.newSingleThreadExecutor();
+
+    private final Executor executor = Executors.newSingleThreadExecutor();
 
     private Context context;
 
-    private  TFDatabase db;
-    private TFDao tfDao;
+    private SQLiteDatabase database;
 
-    public DatabaseManager() {
-        db = DBController.getInstance().getDatabase();
-        tfDao = db.tfDao();
+    private void createDatabase(SQLiteDatabase database) {
+        database.execSQL(
+                "CREATE TABLE tags (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE);"
+        );
     }
 
-    //TODO: new adding to all tables
-    //TODO: rewrite with callable if you want
-    public void addFileByTag(String file, String tagName) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                Tag newTag = new Tag();
-                newTag.name = tagName;
-                tfDao.addTag(newTag);
+    public long addTag(Tag tag) {
+        checkInitialized();
 
-                Files newFile = new Files();
-                newFile.name = file;
-                tfDao.addFile(newFile);
-            }
-        });
-
+        ContentValues values = new ContentValues();
+        values.put("name", tag.getName());
+        return database.insert("tags", null, values);
     }
 
-    //TODO: make recieving with JOIN
-    public String getAllFiles() {
-        List<Tag> tags = new ArrayList<Tag>();
-        List<Files> files = new ArrayList<Files>();
 
-        Future<List<Tag>> future_t;
-        Future<List<Files>> future_f;
+    public void getAllTags(final ReadTagsListener<Tag> listener) {
+        checkInitialized();
 
-        future_t = executor.submit(new Callable<List<Tag>>() {
-            @Override
-            public List<Tag> call() {
-                return tfDao.getAllTags();
-            }
-        });
+        Cursor cursor = database.rawQuery("select id, name from tags;", null);
+        if (cursor == null) {
+            listener.onGetTags(Collections.<Tag>emptyList());
+            return;
+        }
 
+        final List<Tag> result = new ArrayList<>();
         try {
-            tags = future_t.get();
-        } catch (Exception e) {
-            // failed
-        }
-
-        future_f = executor.submit(new Callable<List<Files>>() {
-            @Override
-            public List<Files> call() {
-                return tfDao.getAllFiles();
+            while (cursor.moveToNext()) {
+                result.add(Tag.toTag(cursor.getString(cursor.getColumnIndex("name"))));
             }
-        });
+        } finally {
+            cursor.close();
+        }
+        listener.onGetTags(result);
+    }
 
-        try {
-            files = future_f.get();
-        } catch (Exception e) {
-            // failed
+
+    private void checkInitialized() {
+        if (database != null) {
+            return;
         }
 
-        String result = "";
-        for (int i = 0; i < tags.size(); ++i) {
-            result += tags.get(i) + " : " + files.get(i) + "\n";
-        }
-        return result;
+        SQLiteOpenHelper helper = new SQLiteOpenHelper(context, DB_NAME, null, VERSION) {
+
+            @Override
+            public void onCreate(SQLiteDatabase db) {
+                createDatabase(db);
+            }
+
+            @Override
+            public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+                db.execSQL("DROP TABLE IF EXISTS tags");
+                onCreate(db);
+            }
+        };
+
+        database = helper.getWritableDatabase();
+    }
+
+
+    public interface ReadTagsListener<T> {
+        void onGetTags(final Collection<T> allTags);
     }
 }

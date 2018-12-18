@@ -1,21 +1,24 @@
 package com.example.anton.tag_forest.TagDB.entities;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+
 import android.support.annotation.NonNull;
 
-@Entity
 public class Tag {
 
     @NonNull
-    @PrimaryKey
-    public Integer id;
+    private String name;
 
-    public String name;
+    public Tag(@NonNull String name) {
+        this.name = name;
+    }
 
-    @Override
-    public String toString() {
+    @NonNull
+    public String getName() {
         return name;
+    }
+
+    public static Tag toTag(@NonNull String name) {
+        return new Tag(name);
     }
 }
 
