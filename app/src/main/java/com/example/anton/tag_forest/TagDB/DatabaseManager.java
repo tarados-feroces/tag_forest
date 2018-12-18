@@ -34,6 +34,7 @@ public class DatabaseManager {
 
     private final Executor executor = Executors.newSingleThreadExecutor();
 
+
     private Context context;
 
     private SQLiteDatabase database;
@@ -51,7 +52,6 @@ public class DatabaseManager {
         values.put("name", tag.getName());
         return database.insert("tags", null, values);
     }
-
 
     public void getAllTags(final ReadTagsListener<Tag> listener) {
         checkInitialized();

@@ -1,19 +1,15 @@
 package com.example.anton.tag_forest;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.TextView;
 
 public class RecyclerFragment extends Fragment {
 
@@ -41,23 +37,22 @@ public class RecyclerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TagAdapter tagAdapter = new TagAdapter(getContext(), this::onItemClick);
+        TagAdapter tagAdapter = new TagAdapter(getContext());
 
         RecyclerView tags = view.findViewById(R.id.tags_list);
-        tags.setLayoutManager(new GridLayoutManager(getContext(), getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3));
+        tags.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         tags.setAdapter(tagAdapter);
         tags.setHasFixedSize(true);
 
+        //TODO: get values from DB
         tagAdapter.add("Images");
         tagAdapter.add("Documents");
         tagAdapter.add("Video");
+        tagAdapter.add("Math");
+        tagAdapter.add("Programming");
+        tagAdapter.add("Books");
+        tagAdapter.add("my_stuff");
+        tagAdapter.add("Study");
+        tagAdapter.add("Physics");
     }
-
-    private void onItemClick(String i) {
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, TagFragment.newInstance(i))
-                .addToBackStack(null)
-                .commit();
-    }
-
 }
