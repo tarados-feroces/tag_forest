@@ -1,4 +1,4 @@
-package com.example.anton.tag_forest.TagDB;
+package com.example.anton.tag_forest.TagDB.entities;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
@@ -8,11 +8,11 @@ import android.support.annotation.NonNull;
 public class TagFile {
     @NonNull
     @PrimaryKey
-    public Integer tag_id;
-    public Integer file_id;
+    public Integer tagId;
+    public Integer fileId;
 
     @Override
     public String toString() {
-        return tag_id + " : " + file_id;
+        return tagId + "->" + fileId;
     }
 }

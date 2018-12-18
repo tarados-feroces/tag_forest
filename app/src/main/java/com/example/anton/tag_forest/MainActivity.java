@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.container, RecyclerFragment.newInstance())
                 .commit();
 
-        DatabaseManager db = new DatabaseManager();
+        DatabaseManager db = DatabaseManager.getInstance(this);
 //        db.addFileByTag("/home/danchetto/12345", "LOL");
         Log.d("wat?", db.getAllFiles().toString());
     }

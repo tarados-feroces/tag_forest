@@ -2,12 +2,13 @@ package com.example.anton.tag_forest.TagDB;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
+
+import com.example.anton.tag_forest.TagDB.entities.Files;
+import com.example.anton.tag_forest.TagDB.entities.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -17,7 +18,7 @@ public class DatabaseManager {
     @SuppressLint("StaticFieldLeak")
     private static final DatabaseManager INSTANCE = new DatabaseManager();
 
-    static DatabaseManager getInstance(Context context) {
+    public static DatabaseManager getInstance(Context context) {
         INSTANCE.context = context.getApplicationContext();
         return INSTANCE;
     }
