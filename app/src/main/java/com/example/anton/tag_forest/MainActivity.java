@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.example.anton.tag_forest.TagDB.DatabaseManager;
 
+import java.util.logging.Logger;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,9 +23,11 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.container, RecyclerFragment.newInstance())
                 .commit();
 
+        findViewById(R.id.btn_file_manager).setOnClickListener(v -> startActivity(
+                new Intent(MainActivity.this, SearchActivity.class)
+        ));
+
         DatabaseManager db = new DatabaseManager();
-//        db.addFileByTag("/home/danchetto/12345", "LOL");
-        Log.d("wat?", db.getAllFiles().toString());
     }
 
     public void goToSearch(View view) {

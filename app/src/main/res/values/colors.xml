@@ -10,4 +10,6 @@
     <color name="pink">#ffa3c5</color>
     <color name="orange">#ff6600</color>
     <color name="purple">#e400ec</color>
+
+    <color name="toolbar_orange">#fd6905</color>
 </resources>
