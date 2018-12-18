@@ -22,7 +22,7 @@ public class DatabaseManager {
         return INSTANCE;
     }
 
-    private final ExecutorService executor =  Executors.newSingleThreadExecutor();
+    private final ExecutorService executor =  Executors.newFixedThreadPool(2);
 
     private Context context;
 
@@ -54,42 +54,42 @@ public class DatabaseManager {
 
     //TODO: make recieving with JOIN
     public String getAllFiles() {
-        List<Tag> tags = new ArrayList<Tag>();
-        List<Files> files = new ArrayList<Files>();
+        List<Tag> tags = tfDao.getAllTags();
+        List<Files> files = tfDao.getAllFiles();
 
-        Future<List<Tag>> future_t;
-        Future<List<Files>> future_f;
+//        Future<List<Tag>> future_t;
+//        Future<List<Files>> future_f;
+//
+//        future_t = executor.submit(new Callable<List<Tag>>() {
+//            @Override
+//            public List<Tag> call() {
+//                return tfDao.getAllTags();
+//            }
+//        });
+//
+//        try {
+//            tags = future_t.get();
+//        } catch (Exception e) {
+//            // failed
+//        }
+//
+//        future_f = executor.submit(new Callable<List<Files>>() {
+//            @Override
+//            public List<Files> call() {
+//                return tfDao.getAllFiles();
+//            }
+//        });
+//
+//        try {
+//            files = future_f.get();
+//        } catch (Exception e) {
+//            // failed
+//        }
 
-        future_t = executor.submit(new Callable<List<Tag>>() {
-            @Override
-            public List<Tag> call() {
-                return tfDao.getAllTags();
-            }
-        });
-
-        try {
-            tags = future_t.get();
-        } catch (Exception e) {
-            // failed
-        }
-
-        future_f = executor.submit(new Callable<List<Files>>() {
-            @Override
-            public List<Files> call() {
-                return tfDao.getAllFiles();
-            }
-        });
-
-        try {
-            files = future_f.get();
-        } catch (Exception e) {
-            // failed
-        }
-
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < tags.size(); ++i) {
-            result += tags.get(i) + " : " + files.get(i) + "\n";
+            result.append(tags.get(i)).append(" : ").append(files.get(i)).append("\n");
         }
-        return result;
+        return result.toString();
     }
 }
