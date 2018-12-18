@@ -44,7 +44,7 @@ public class RecyclerFragment extends Fragment {
         TagAdapter tagAdapter = new TagAdapter(getContext(), this::onItemClick);
 
         RecyclerView tags = view.findViewById(R.id.tags_list);
-        tags.setLayoutManager(new GridLayoutManager(getContext(), getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3));
+        tags.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         tags.setAdapter(tagAdapter);
         tags.setHasFixedSize(true);
 

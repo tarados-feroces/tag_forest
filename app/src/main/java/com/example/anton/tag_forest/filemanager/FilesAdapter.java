@@ -103,7 +103,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         void bind(final File file) {
             if (file.isDirectory()) {
                 filename.setTypeface(null, Typeface.BOLD);
-                filename.setText("[" + file.getName() + "]");
+                filename.setText(file.getName() + "/");
             } else {
                 filename.setTypeface(null, Typeface.NORMAL);
                 filename.setText(file.getName());

@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         fragment = new FileManagerFragment();
 
         getSupportFragmentManager().beginTransaction()
-                //.replace(R.id.container, RecyclerFragment.newInstance())
+                .replace(R.id.tag_container, RecyclerFragment.newInstance())
                 .replace(R.id.container, fragment)
                 .commit();
 

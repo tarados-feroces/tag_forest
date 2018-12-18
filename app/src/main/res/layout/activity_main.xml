@@ -45,14 +45,30 @@
 
         </RelativeLayout>
 
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@id/header"
-            android:gravity="center"
-            tools:context=".MainActivity">
-        </FrameLayout>
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/tag_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                tools:context=".MainActivity"
+                android:layout_marginBottom="10dp">
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                tools:context=".MainActivity">
+            </FrameLayout>
+
+        </LinearLayout>
 
     </RelativeLayout>
 
