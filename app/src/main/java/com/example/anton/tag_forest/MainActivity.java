@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.container, fragment)
                 .commit();
 
+        DatabaseManager db = DatabaseManager.getInstance(this);
+
 
         db.addTag(Tag.toTag("Video"));
         db.addTag(Tag.toTag("Music"));
@@ -78,14 +80,13 @@ public class MainActivity extends AppCompatActivity {
 
         db.getAllTags(readListener);
 
-        DatabaseManager db = new DatabaseManager();
 
     }
 
-    public void goToSearch(View view) {
-        Intent searchIntent = new Intent(this, SearchActivity.class);
-        startActivity(searchIntent);
-    }
+//    public void goToSearch(View view) {
+//        Intent searchIntent = new Intent(this, SearchActivity.class);
+//        startActivity(searchIntent);
+//    }
 
     private void showStringList(final Collection<Tag> tags) {
         final List<String> list = new ArrayList<>();
