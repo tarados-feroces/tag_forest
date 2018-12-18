@@ -15,7 +15,7 @@ import com.example.anton.tag_forest.filemanager.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    FilesAdapter adapter;
+    FileManagerFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +28,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
-        FileManagerFragment fileManagerFragment = new FileManagerFragment();
-        adapter = fileManagerFragment.getAdapter();
+        fragment = new FileManagerFragment();
 
         getSupportFragmentManager().beginTransaction()
                 //.replace(R.id.container, RecyclerFragment.newInstance())
-                .replace(R.id.container, fileManagerFragment)
+                .replace(R.id.container, fragment)
                 .commit();
 
         findViewById(R.id.btn_file_manager).setOnClickListener(v -> startActivity(
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!adapter.goBack()) {
+        if (!fragment.getAdapter().goBack()) {
             super.onBackPressed();
         }
     }
