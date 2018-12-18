@@ -37,7 +37,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerView
     @Override
     public void onBindViewHolder(TagsRecyclerViewHolder holder, int position) {
         holder.bind(data.get(position), this.onItemClickListener);
-        holder.tag.setTextColor(Color.RED);
+        holder.tag.setTextColor(Color.WHITE);
     }
 
     @Override

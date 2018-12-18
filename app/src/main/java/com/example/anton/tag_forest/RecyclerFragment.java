@@ -48,9 +48,16 @@ public class RecyclerFragment extends Fragment {
         tags.setAdapter(tagAdapter);
         tags.setHasFixedSize(true);
 
+        //TODO: get values from DB
         tagAdapter.add("Images");
         tagAdapter.add("Documents");
         tagAdapter.add("Video");
+        tagAdapter.add("Math");
+        tagAdapter.add("Programming");
+        tagAdapter.add("Books");
+        tagAdapter.add("my_stuff");
+        tagAdapter.add("Study");
+        tagAdapter.add("Physics");
     }
 
     private void onItemClick(String i) {
