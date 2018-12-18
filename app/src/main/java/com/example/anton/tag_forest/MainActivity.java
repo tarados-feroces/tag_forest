@@ -1,5 +1,9 @@
 package com.example.anton.tag_forest;
 
+
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,9 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.anton.tag_forest.TagDB.DatabaseManager;
+import com.example.anton.tag_forest.TagDB.entities.Tag;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import com.example.anton.tag_forest.filemanager.*;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -56,13 +66,49 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.container, fragment)
                 .commit();
 
+
+        db.addTag(Tag.toTag("Video"));
+        db.addTag(Tag.toTag("Music"));
+        db.addTag(Tag.toTag("Data"));
+        db.addTag(Tag.toTag("Math"));
+        db.addTag(Tag.toTag("Sport"));
+        db.addTag(Tag.toTag("Photo"));
+        db.addTag(Tag.toTag("Algebra"));
+        db.addTag(Tag.toTag("F9"));
+
+        db.getAllTags(readListener);
+
         DatabaseManager db = new DatabaseManager();
+
     }
 
     public void goToSearch(View view) {
         Intent searchIntent = new Intent(this, SearchActivity.class);
         startActivity(searchIntent);
     }
+
+    private void showStringList(final Collection<Tag> tags) {
+        final List<String> list = new ArrayList<>();
+        for (Tag tag: tags) {
+            list.add(tag.getName());
+        }
+        new AlertDialog.Builder(this)
+                .setItems(list.toArray(new String[0]), null)
+                .show();
+    }
+
+    private final DatabaseManager.ReadTagsListener<Tag> readListener = new DatabaseManager.ReadTagsListener<Tag>() {
+
+        @Override
+        public void onGetTags(final Collection<Tag> tags) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showStringList(tags);
+                }
+            });
+        }
+    };
 
     @Override
     public void onBackPressed() {
