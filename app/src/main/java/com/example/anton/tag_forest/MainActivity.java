@@ -1,27 +1,22 @@
 package com.example.anton.tag_forest;
 
-
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
-import android.view.View;
-import android.widget.Toast;
 
 import com.example.anton.tag_forest.TagDB.DatabaseManager;
 import com.example.anton.tag_forest.TagDB.entities.Tag;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import com.example.anton.tag_forest.filemanager.*;
 
+import com.example.anton.tag_forest.filemanager.*;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -90,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showStringList(final Collection<Tag> tags) {
         final List<String> list = new ArrayList<>();
-        for (Tag tag: tags) {
+        for (Tag tag : tags) {
             list.add(tag.getName());
         }
         new AlertDialog.Builder(this)
@@ -98,18 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    private final DatabaseManager.ReadTagsListener<Tag> readListener = new DatabaseManager.ReadTagsListener<Tag>() {
-
-        @Override
-        public void onGetTags(final Collection<Tag> tags) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showStringList(tags);
-                }
-            });
-        }
-    };
+    private final DatabaseManager.ReadTagsListener<Tag> readListener = tags -> runOnUiThread(() -> showStringList(tags));
 
     @Override
     public void onBackPressed() {

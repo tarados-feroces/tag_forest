@@ -8,7 +8,7 @@ public class Tag {
     @NonNull
     private String name;
 
-    public Tag(@NonNull String name) {
+    private Tag(@NonNull String name) {
         this.name = name;
     }
 

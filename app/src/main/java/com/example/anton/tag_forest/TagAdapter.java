@@ -20,7 +20,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerView
     private final List<String> data;
 
 
-    public TagAdapter(Context context) {
+    TagAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
 
         this.data = new ArrayList<>();
@@ -33,7 +33,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerView
     }
 
     @Override
-    public void onBindViewHolder(TagsRecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TagsRecyclerViewHolder holder, int position) {
         holder.bind(data.get(position));
         holder.tag.setTextColor(Color.WHITE);
     }
@@ -60,7 +60,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagsRecyclerView
         void bind(final String name) {
             tag.setText(name);
 
-            itemView.setOnClickListener(v -> {Toast.makeText(tag.getContext(), name, Toast.LENGTH_LONG).show();});
+            itemView.setOnClickListener(v -> Toast.makeText(tag.getContext(), name, Toast.LENGTH_LONG).show());
         }
     }
 }

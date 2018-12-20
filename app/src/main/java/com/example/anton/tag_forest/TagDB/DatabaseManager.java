@@ -6,8 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.Nullable;
-
 
 import com.example.anton.tag_forest.TagDB.entities.Tag;
 
@@ -15,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class DatabaseManager {
 
@@ -31,10 +27,6 @@ public class DatabaseManager {
         return INSTANCE;
     }
 
-
-    private final Executor executor = Executors.newSingleThreadExecutor();
-
-
     private Context context;
 
     private SQLiteDatabase database;
@@ -45,12 +37,12 @@ public class DatabaseManager {
         );
     }
 
-    public long addTag(Tag tag) {
+    public void addTag(Tag tag) {
         checkInitialized();
 
         ContentValues values = new ContentValues();
         values.put("name", tag.getName());
-        return database.insert("tags", null, values);
+        database.insert("tags", null, values);
     }
 
     public void getAllTags(final ReadTagsListener<Tag> listener) {
@@ -58,7 +50,7 @@ public class DatabaseManager {
 
         Cursor cursor = database.rawQuery("select id, name from tags;", null);
         if (cursor == null) {
-            listener.onGetTags(Collections.<Tag>emptyList());
+            listener.onGetTags(Collections.emptyList());
             return;
         }
 
