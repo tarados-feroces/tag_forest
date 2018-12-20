@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        SearchView searchView = findViewById(R.id.search_panel);
+        SearchView searchView = findViewById(R.id.search);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
