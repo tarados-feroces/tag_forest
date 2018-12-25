@@ -42,13 +42,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-
+                fragment.getAdapter().update(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
                 return false;
             }
         });
@@ -64,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseManager db = DatabaseManager.getInstance(this);
 
 
+
         db.addTag(Tag.toTag("Video"));
         db.addTag(Tag.toTag("Music"));
         db.addTag(Tag.toTag("Data"));
@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         db.addTag(Tag.toTag("F9"));
 
         db.selectTags(readListener, 4);
+
     }
 
     private void showStringList(final Collection<Tag> tags) {
