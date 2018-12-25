@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.anton.tag_forest.TagDB.DatabaseManager;
 import com.example.anton.tag_forest.TagDB.entities.Tag;
@@ -42,12 +43,13 @@ public class RecyclerFragment extends Fragment {
         return inflater.inflate(R.layout.recycler_fragment, container, false);
     }
 
-    private List<String> getPopularTags(final Collection<Tag> tagList) {
+    private void getPopularTags(final Collection<Tag> tagList, TagAdapter tagAdapter) {
         final List<String> list = new ArrayList<>();
         for (Tag tag : tagList) {
-            list.add(tag.getName());
+            tagAdapter.add(tag.getName());
+//            Toast.makeText(this.getContext(), tag.getName(), Toast.LENGTH_LONG).show();
         }
-        return list;
+
     }
 
     @Override
@@ -63,20 +65,20 @@ public class RecyclerFragment extends Fragment {
 
         DatabaseManager db = DatabaseManager.getInstance(getContext());
 
-        final DatabaseManager.ReadTagsListener<Tag> popularTagsReader =
-                tagList -> new Handler(Looper.getMainLooper()).post(() -> getPopularTags(tagList));
+        final DatabaseManager.TagSelectionListener<Tag> popularTagsReader =
+                tagList -> new Handler(Looper.getMainLooper()).post(() -> getPopularTags(tagList, tagAdapter));
 
-        db.getPopularTags(popularTagsReader);
+        db.selectTags(popularTagsReader, 10);
 
         //TODO: get values from DB
-        tagAdapter.add("Images");
-        tagAdapter.add("Documents");
-        tagAdapter.add("Video");
-        tagAdapter.add("Math");
-        tagAdapter.add("Programming");
-        tagAdapter.add("Books");
-        tagAdapter.add("my_stuff");
-        tagAdapter.add("Study");
-        tagAdapter.add("Physics");
+//        tagAdapter.add("Images");
+//        tagAdapter.add("Documents");
+//        tagAdapter.add("Video");
+//        tagAdapter.add("Math");
+//        tagAdapter.add("Programming");
+//        tagAdapter.add("Books");
+//        tagAdapter.add("my_stuff");
+//        tagAdapter.add("Study");
+//        tagAdapter.add("Physics");
     }
 }

@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         db.addTag(Tag.toTag("Algebra"));
         db.addTag(Tag.toTag("F9"));
 
-        db.selectTags(readListener, 4);
+//        db.selectTags(readListener, 4);
 
     }
 
