@@ -88,7 +88,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
     public void update(String query) {
         List<File> result = new ArrayList<>();
         update(result, files, query);
-        files = (File[]) result.toArray();
+        files = result.toArray(new File[result.size()]);
         notifyDataSetChanged();
     }
 
