@@ -84,10 +84,14 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
 
     final class FileViewHolder extends RecyclerView.ViewHolder {
         private final TextView filename;
+        private final TextView iconFile;
+        private final TextView iconFolder;
 
         FileViewHolder(View view) {
             super(view);
             filename = view.findViewById(R.id.filename);
+            iconFile = view.findViewById(R.id.file_icon);
+            iconFolder = view.findViewById(R.id.folder_icon);
         }
 
         String getMimeType(String url) {
@@ -102,9 +106,11 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         @SuppressLint("SetTextI18n")
         void bind(final File file) {
             if (file.isDirectory()) {
+                iconFile.setVisibility(View.GONE);
                 filename.setTypeface(null, Typeface.BOLD);
                 filename.setText(file.getName() + "/");
             } else {
+                iconFolder.setVisibility(View.GONE);
                 filename.setTypeface(null, Typeface.NORMAL);
                 filename.setText(file.getName());
             }
