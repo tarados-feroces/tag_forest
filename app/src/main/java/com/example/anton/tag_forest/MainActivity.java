@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Pair;
 
 import com.example.anton.tag_forest.TagDB.DatabaseManager;
 import com.example.anton.tag_forest.TagDB.entities.Tag;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
                 return false;
             }
         });
