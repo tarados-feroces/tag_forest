@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                new Thread(() -> fragment.getAdapter().update(query)).start();
+                fragment.getAdapter().update(query);
                 return false;
             }
 
