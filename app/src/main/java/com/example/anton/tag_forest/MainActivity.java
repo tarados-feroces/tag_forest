@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-
+                fragment.getAdapter().update(query);
                 return false;
             }
 
@@ -64,16 +64,16 @@ public class MainActivity extends AppCompatActivity {
         DatabaseManager db = DatabaseManager.getInstance(this);
 
 
-        db.addTag(Tag.toTag("Video"));
-        db.addTag(Tag.toTag("Music"));
-        db.addTag(Tag.toTag("Data"));
-        db.addTag(Tag.toTag("Math"));
-        db.addTag(Tag.toTag("Sport"));
-        db.addTag(Tag.toTag("Photo"));
-        db.addTag(Tag.toTag("Algebra"));
-        db.addTag(Tag.toTag("F9"));
-
-        db.getAllTags(readListener);
+//        db.addTag(Tag.toTag("Video"));
+//        db.addTag(Tag.toTag("Music"));
+//        db.addTag(Tag.toTag("Data"));
+//        db.addTag(Tag.toTag("Math"));
+//        db.addTag(Tag.toTag("Sport"));
+//        db.addTag(Tag.toTag("Photo"));
+//        db.addTag(Tag.toTag("Algebra"));
+//        db.addTag(Tag.toTag("F9"));
+//
+//        db.getAllTags(readListener);
 
 
     }

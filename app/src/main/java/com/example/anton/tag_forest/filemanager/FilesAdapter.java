@@ -25,7 +25,10 @@ import android.widget.Toast;
 import com.example.anton.tag_forest.R;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHolder> {
 
@@ -110,6 +113,24 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
             return f1.getName().compareTo(f2.getName());
         });
     }
+
+    public void update(String query) {
+        List<File> result = new ArrayList<>();
+        update(result, files, query);
+        files = result.toArray(new File[result.size()]);
+        notifyDataSetChanged();
+    }
+
+    private void update(List<File> result, File[] files, String query) {
+        for (File file : files) {
+            if (file.isDirectory()) {
+                update(result, file.listFiles(), query);
+            } else if (file.getName().toLowerCase().contains(query)) {
+                result.add(file);
+            }
+        }
+    }
+
 
     final class FileViewHolder extends RecyclerView.ViewHolder {
         private final TextView filename;
