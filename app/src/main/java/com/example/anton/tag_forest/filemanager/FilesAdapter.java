@@ -1,16 +1,12 @@
 package com.example.anton.tag_forest.filemanager;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -23,12 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.anton.tag_forest.R;
+import com.example.anton.tag_forest.TagDB.DatabaseManager;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHolder> {
 
@@ -38,12 +34,15 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
     private File[] files;
     private File currentFile;
     private Context contex;
+    private DatabaseManager manager;
+    private boolean flag = false;
 
     FilesAdapter(final Context context) {
         this.contex = context;
         layoutInflater = LayoutInflater.from(context);
         initialFile = Environment.getExternalStorageDirectory();
         setDirectory(initialFile);
+        manager = DatabaseManager.getInstance(context);
     }
 
     private void setDirectory(final File file) {
@@ -54,8 +53,12 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
     }
 
     public boolean goBack() {
-        if (currentFile.equals(initialFile)) {
+        if (currentFile.equals(initialFile) && !flag) {
             return false;
+        }
+        if (flag) {
+            setDirectory(currentFile);
+            return true;
         }
         File parent = currentFile.getParentFile();
         if (parent != null) {
@@ -98,6 +101,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
 //        return builder.create();
 //    }
 
+
     @Override
     public int getItemCount() {
         return files != null ? files.length : 0;
@@ -117,8 +121,10 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
     public void update(String query) {
         List<File> result = new ArrayList<>();
         update(result, files, query);
-        files = result.toArray(new File[result.size()]);
+        files = result.toArray(new File[0]);
+        sortFiles(files);
         notifyDataSetChanged();
+        flag = true;
     }
 
     private void update(List<File> result, File[] files, String query) {
@@ -183,23 +189,17 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
             itemView.setOnLongClickListener(v -> {
                 if (file.isFile()) {
                     LayoutInflater factory = LayoutInflater.from(contex);
-                    final View textEntryView = factory.inflate(R.layout.file_action, null);
+                    @SuppressLint("InflateParams") final View textEntryView = factory.inflate(R.layout.file_action, null);
                     AlertDialog.Builder builder = new AlertDialog.Builder(contex);
                     builder.setView(textEntryView)
-                        .setPositiveButton("Добавить",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
+                            .setPositiveButton("Добавить",
+                                    (dialog, id) -> {
                                         EditText editor = textEntryView.findViewById(R.id.tagmane);
                                         Toast.makeText(contex, editor.getText(), Toast.LENGTH_LONG).show();
                                         dialog.dismiss();
-                                    }
-                                })
-                        .setNegativeButton("Отменить",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
+                                    })
+                            .setNegativeButton("Отменить",
+                                    (dialog, id) -> dialog.cancel());
                     AlertDialog alert = builder.create();
                     alert.show();
                     return true;
