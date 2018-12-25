@@ -1,10 +1,11 @@
 package com.example.anton.tag_forest;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.example.anton.tag_forest.TagDB.entities.Tag;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ConcurrentNavigableMap;
 
 public class RecyclerFragment extends Fragment {
 
@@ -40,6 +42,14 @@ public class RecyclerFragment extends Fragment {
         return inflater.inflate(R.layout.recycler_fragment, container, false);
     }
 
+    private List<String> getPopularTags(final Collection<Tag> tagList) {
+        final List<String> list = new ArrayList<>();
+        for (Tag tag : tagList) {
+            list.add(tag.getName());
+        }
+        return list;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -51,15 +61,12 @@ public class RecyclerFragment extends Fragment {
         tags.setAdapter(tagAdapter);
         tags.setHasFixedSize(true);
 
-        private List<String> getPopularTags(final Collection<Tag> tagList) {
-            final List<String> list = new ArrayList<>();
-            for (Tag tag : tagList) {
-                list.add(tag.getName());
-            }
-           return list;
-        }
+        DatabaseManager db = DatabaseManager.getInstance(getContext());
 
-        private final DatabaseManager.ReadTagsListener<Tag> readListener = tagList -> runOnUiThread(() -> getPopularTags(tags));
+        final DatabaseManager.ReadTagsListener<Tag> popularTagsReader =
+                tagList -> new Handler(Looper.getMainLooper()).post(() -> getPopularTags(tagList));
+
+        db.getPopularTags(popularTagsReader);
 
         //TODO: get values from DB
         tagAdapter.add("Images");
