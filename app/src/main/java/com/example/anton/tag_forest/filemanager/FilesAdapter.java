@@ -1,11 +1,16 @@
 package com.example.anton.tag_forest.filemanager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.anton.tag_forest.R;
 
@@ -65,6 +72,28 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
     public void onBindViewHolder(@NonNull FileViewHolder holder, int position) {
         holder.bind(files[position]);
     }
+
+//    @Override
+//    public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(contex);
+//        // Get the layout inflater
+//        // Inflate and set the layout for the dialog
+//        // Pass null as the parent view because its going in the dialog layout
+//        builder.setView(contex.R.layout.file_action, null)
+//                // Add action buttons
+//                .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        // sign in the user ...
+//                    }
+//                })
+//                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        LoginDialogFragment.this.getDialog().cancel();
+//                    }
+//                });
+//        return builder.create();
+//    }
 
     @Override
     public int getItemCount() {
@@ -127,6 +156,34 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
                     } catch (ActivityNotFoundException ignored) {
 
                     }
+                }
+            });
+            itemView.setLongClickable(true);
+            itemView.setOnLongClickListener(v -> {
+                if (file.isFile()) {
+                    LayoutInflater factory = LayoutInflater.from(contex);
+                    final View textEntryView = factory.inflate(R.layout.file_action, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(contex);
+                    builder.setView(textEntryView)
+                        .setPositiveButton("Добавить",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        EditText editor = textEntryView.findViewById(R.id.tagmane);
+                                        Toast.makeText(contex, editor.getText(), Toast.LENGTH_LONG).show();
+                                        dialog.dismiss();
+                                    }
+                                })
+                        .setNegativeButton("Отменить",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    return true;
+                } else {
+                    return false;
                 }
             });
         }
