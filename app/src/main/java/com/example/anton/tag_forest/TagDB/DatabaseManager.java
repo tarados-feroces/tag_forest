@@ -6,7 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.example.anton.tag_forest.TagDB.entities.File;
 import com.example.anton.tag_forest.TagDB.entities.Tag;
 
 import java.util.ArrayList;
@@ -35,33 +38,151 @@ public class DatabaseManager {
         database.execSQL(
                 "CREATE TABLE tags (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE);"
         );
+        database.execSQL(
+                "CREATE TABLE files (id INTEGER PRIMARY KEY AUTOINCREMENT, path TEXT NOT NULL UNIQUE);"
+        );
+        database.execSQL(
+                "CREATE TABLE tag_files (id INTEGER PRIMARY KEY AUTOINCREMENT, tag_id INTEGER references tags(id), file_id INTEGER references files(id));"
+        );
+        database.execSQL(
+                "CREATE UNIQUE INDEX IF NOT EXISTS tag_files_index ON tag_files(tag_id, file_id);"
+        );
+        database.execSQL(
+                "CREATE UNIQUE INDEX IF NOT EXISTS files_tag_index ON tag_files(file_id, tag_id);"
+        );
     }
 
-    public void addTag(Tag tag) {
+
+
+    @Nullable
+    public Tag getTagByName(@NonNull String tagName) {
+        checkInitialized();
+
+        Cursor cursor = database.rawQuery("select * from tags where lower(name) == lower(?) limit 1", new String[]{tagName});
+
+        if (cursor == null) {
+            return null;
+        }
+
+        try {
+            if (cursor.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                Long id = cursor.getLong(cursor.getColumnIndex("id"));
+                cursor.close();
+                return new Tag(id, name);
+            }
+        } finally {
+            cursor.close();
+        }
+        return null;
+    }
+
+    @Nullable
+    public File getFileByName(@NonNull String fileName) {
+        checkInitialized();
+
+        Cursor cursor = database.rawQuery("select id, name from files where name == ? limit 1", new String[]{fileName});
+
+        if (cursor == null) {
+            return null;
+        }
+
+        try {
+            if (cursor.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                Long id = cursor.getLong(cursor.getColumnIndex("id"));
+                cursor.close();
+                return new File(id, name);
+            }
+        } finally {
+            cursor.close();
+        }
+        return null;
+    }
+
+    public Long addTag(Tag tag) {
         checkInitialized();
 
         ContentValues values = new ContentValues();
         values.put("name", tag.getName());
-        database.insert("tags", null, values);
+        final long tagId = database.insertWithOnConflict("tags", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        if (tagId == -1) {
+            return null;
+        }
+        return tagId;
     }
 
-    public void getAllTags(final ReadTagsListener<Tag> listener) {
+    public Long addFile(File file) {
         checkInitialized();
 
-        Cursor cursor = database.rawQuery("select id, name from tags;", null);
+        ContentValues values = new ContentValues();
+        values.put("name", file.getName());
+        final long fileId = database.insertWithOnConflict("files", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        if (fileId == -1) {
+            return null;
+        }
+        return fileId;
+    }
+
+    private String addTagFile(Tag tag, File file) {
+        checkInitialized();
+
+        Tag selectedTag = getTagByName(tag.getName());
+        if (selectedTag == null) {
+            Long tagId = addTag(tag);
+            if (tagId == null) {
+                return "Error: can't insert tag(" + tag.getName() + ") into table tags";
+            }
+            selectedTag = new Tag(tagId, tag.getName());
+        }
+
+        File selectedFile = getFileByName(tag.getName());
+        if (selectedFile == null) {
+            Long fileId = addFile(file);
+            if (fileId == null) {
+                return "Error: can't insert file(" + file.getName() + ") into table files";
+            }
+            selectedFile = new File(fileId, file.getName());
+        }
+
+        ContentValues values = new ContentValues();
+        values.put("file_id", selectedFile.getId());
+        values.put("tag_id", selectedTag.getId());
+        final long fileId = database.insertWithOnConflict("tag_files", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        if (fileId == -1) {
+            return "Error: can't insert ids pair into table tag_files";
+        }
+        return "All Done!";
+    }
+
+
+    public void addTagAndFile(String tagName, String fileName, TagFileAdditionListener listener) {
+        String response = addTagFile(new Tag(tagName), new File(fileName));
+        listener.onAdditionTagFile(response);
+    }
+
+
+    public void selectTags(final TagSelectionListener<Tag> listener, final int count) {
+        checkInitialized();
+
+        Cursor cursor = database.rawQuery("select id, name from tags limit " + Integer.toString(count), null);
         if (cursor == null) {
             listener.onGetTags(Collections.emptyList());
             return;
         }
 
         final List<Tag> result = new ArrayList<>();
+        
         try {
             while (cursor.moveToNext()) {
-                result.add(Tag.toTag(cursor.getString(cursor.getColumnIndex("name"))));
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                Long id = cursor.getLong(cursor.getColumnIndex("id"));
+                result.add(new Tag(id, name));
             }
         } finally {
             cursor.close();
         }
+
         listener.onGetTags(result);
     }
 
@@ -89,7 +210,15 @@ public class DatabaseManager {
     }
 
 
-    public interface ReadTagsListener<T> {
-        void onGetTags(final Collection<T> allTags);
+    public interface TagFileAdditionListener {
+        void onAdditionTagFile(final String response);
+    }
+
+    public interface TagSelectionListener<T> {
+        void onGetTags(final Collection<T> tags);
+    }
+
+    public interface FileSelectionListener<T> {
+        void onGetFiles(final Collection<T> files);
     }
 }
