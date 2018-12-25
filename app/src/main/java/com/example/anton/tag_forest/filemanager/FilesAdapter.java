@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.anton.tag_forest.R;
 
@@ -127,6 +128,15 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
                     } catch (ActivityNotFoundException ignored) {
 
                     }
+                }
+            });
+            itemView.setLongClickable(true);
+            itemView.setOnLongClickListener(v -> {
+                if (file.isFile()) {
+                    Toast.makeText(contex, file.getName(), Toast.LENGTH_LONG).show();
+                    return true;
+                } else {
+                    return false;
                 }
             });
         }
