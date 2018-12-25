@@ -73,27 +73,20 @@ public class MainActivity extends AppCompatActivity {
         db.addTag(Tag.toTag("Algebra"));
         db.addTag(Tag.toTag("F9"));
 
-        db.getAllTags(readListener);
-
-
+        db.selectTags(readListener, 4);
     }
-
-//    public void goToSearch(View view) {
-//        Intent searchIntent = new Intent(this, SearchActivity.class);
-//        startActivity(searchIntent);
-//    }
 
     private void showStringList(final Collection<Tag> tags) {
         final List<String> list = new ArrayList<>();
         for (Tag tag : tags) {
-            list.add(tag.getName());
+            list.add(tag.getId() + ": " + tag.getName());
         }
         new AlertDialog.Builder(this)
                 .setItems(list.toArray(new String[0]), null)
                 .show();
     }
 
-    private final DatabaseManager.ReadTagsListener<Tag> readListener = tags -> runOnUiThread(() -> showStringList(tags));
+    private final DatabaseManager.TagSelectionListener<Tag> readListener = tags -> runOnUiThread(() -> showStringList(tags));
 
     @Override
     public void onBackPressed() {
